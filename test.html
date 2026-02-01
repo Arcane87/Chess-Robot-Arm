@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DroidCam Direct Test</title>
+    <style>
+        body { background: black; color: white; }
+        canvas { border: 2px solid red; }
+    </style>
+</head>
+<body>
+    <h1>DroidCam Direct Canvas Test</h1>
+    
+    <canvas id="myCanvas" width="640" height="480"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        let img = new Image();
+        
+        img.crossOrigin = 'anonymous';
+        
+        img.onload = function() {
+            console.log('Image loaded!', img.width, 'x', img.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            console.log('Canvas drawn!');
+        };
+        
+        img.onerror = function(e) {
+            console.error('Image error:', e);
+        };
+        
+        function loadFrame() {
+            const url = 'http://localhost:8080/frame?t=' + Date.now();
+            console.log('Loading:', url);
+            img.src = url;
+        }
+        
+        loadFrame();
+        setInterval(loadFrame, 100);
+    </script>
+</body>
+</html>
